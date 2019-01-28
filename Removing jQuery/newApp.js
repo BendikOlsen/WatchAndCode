@@ -1,15 +1,15 @@
 /*global jQuery, Handlebars, Router */
-jQuery(function ($) {
-	'use strict';
+jQuery(function ($) {  // Executes code when DOM is ready. 
+	'use strict';    // Invoking strict mode to the overlying function and everything inside it. Strict mode can optimize the code and make the application run faster. 
 
-	Handlebars.registerHelper('eq', function (a, b, options) {
+	Handlebars.registerHelper('eq', function (a, b, options) {  //  note to self. Read up on handlebars and watch video
 		return a === b ? options.fn(this) : options.inverse(this);
 	});
 
-	var ENTER_KEY = 13;
-	var ESCAPE_KEY = 27;
+	var ENTER_KEY = 13;  // Binding the variable ENTER_KEY to 13 which is the key code for enter on keyboards
+	var ESCAPE_KEY = 27;  //  Binding the variable ESCAPE_KEY to 13, which is the key code for escape. 
 
-	var util = {
+	var util = {  //  Generates a random id on 32 random numbers. 
 		uuid: function () {
 			/*jshint bitwise:false */
 			var i, random;
@@ -23,29 +23,29 @@ jQuery(function ($) {
 				uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
 			}
 
-			return uuid;
+			return uuid; // return the uuid so it's accessible outside the funciton
 		},
-		pluralize: function (count, word) {
+		pluralize: function (count, word) { // If there are more items then 1 or 0 items, the text in the footer will pluralize item to items. 
 			return count === 1 ? word : word + 's';
 		},
-		store: function (namespace, data) {
-			if (arguments.length > 1) {
-				return localStorage.setItem(namespace, JSON.stringify(data));
+		store: function (namespace, data) {   // function to store the data locally on the machine. It takes two arguments, namespace and data.
+			if (arguments.length > 1) {      //  If theres arguemnts in the store method it will run return setItem()
+				return localStorage.setItem(namespace, JSON.stringify(data));  //setItem() is a method namespace and JSON.stringify(data) to the Storage object.
 			} else {
-				var store = localStorage.getItem(namespace);
-				return (store && JSON.parse(store)) || [];
+				var store = localStorage.getItem(namespace);  //  if the arguments i less than 1, it runs getItem(), which returns the key names?? value or null to the storage object. 
+				return (store && JSON.parse(store)) || [];  //  returns the arguments that were used in the store method as objects and as string. 
 			}
 		}
 	};
 
-	var App = {
+	var App = {    //  this object contain the main methods of the application. 
 		init: function () {
-			this.todos = util.store('todos-jquery');
-			this.todoTemplate = Handlebars.compile($('#todo-template').html());
+			this.todos = util.store('todos-jquery');  //  todo-array is equal to the stored todos from the store-method.
+			this.todoTemplate = Handlebars.compile($('#todo-template').html());  //  note to self. Read up on handlebars and watch video
 			this.footerTemplate = Handlebars.compile($('#footer-template').html());
 			this.bindEvents();
 
-      new Router({
+      new Router({  //  Note to self. Rewatch this video
 				'/:filter': function (filter) {
 					this.filter = filter;
 					this.render();
@@ -122,8 +122,7 @@ jQuery(function ($) {
 		// accepts an element from inside the `.item` div and
 		// returns the corresponding index in the `todos` array
 		indexFromEl: function (el) {
-      var el = document.querySelector('.destroy'); // el selects the destroy class.
-			var id = el.closest('li').getAttribute('id'); // Id takes the closest ancestors to el which matches li. 
+			var id = el.closest('li').getAttribute('data-id'); // Id takes the closest ancestors to el which matches li. 
 			var todos = this.todos;
 			var i = todos.length;
 
@@ -134,8 +133,7 @@ jQuery(function ($) {
 			}
 		},
 		create: function (e) {
-      var input  = document.querySelector('input').value; //  made a new variablle to select value from input
-			var input = event.target                            //  originally var input = $(e.target);
+			var input = e.target                            //  originally var input = $(e.target);
       var val = input.value.trim();                      //  orignally var val = $input.val().trim();
 
 			if (e.which !== ENTER_KEY || !val) {
@@ -195,5 +193,5 @@ jQuery(function ($) {
 		}
 	};
 
-	App.init();
+	App.init(); //  Initiates the app object when the sites load?
 });
