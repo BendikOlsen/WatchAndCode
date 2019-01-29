@@ -45,15 +45,15 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			this.footerTemplate = Handlebars.compile($('#footer-template').html());
 			this.bindEvents();
 
-      new Router({  //  Note to self. Rewatch this video
+      new Router({  //  Note to self. Rewatch last video in the Reading section
 				'/:filter': function (filter) {
 					this.filter = filter;
 					this.render();
 				}.bind(this)
 			}).init('/all');      
 		},
-		bindEvents: function () {
-			$('#new-todo').on('keyup', this.create.bind(this));
+		bindEvents: function () {  //  function for binding event to certain user actions
+			$('#new-todo').on('keyup', this.create.bind(this));  //  Bind the create method on actions where you release keyboard keys in the new todo field
 			$('#toggle-all').on('change', this.toggleAll.bind(this));
 			$('#footer').on('click', '#clear-completed', this.destroyCompleted.bind(this));
 			$('#todo-list')
@@ -84,32 +84,32 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 
 			$('#footer').toggle(todoCount > 0).html(template);
 		},
-		toggleAll: function (e) {
-			var isChecked = $(e.target).prop('checked');
+		toggleAll: function (e) {  // method for toggling all the todos.
+			var isChecked = $(e.target).prop('checked');  //  variable used to see which todos are checked
 
-			this.todos.forEach(function (todo) {
+			this.todos.forEach(function (todo) {  //  forEach, looping through every todo, if the todo is completed thay are also chcked. 
 				todo.completed = isChecked;
 			});
 
 			this.render();
 		},
-		getActiveTodos: function () {
-			return this.todos.filter(function (todo) {
-				return !todo.completed;
+		getActiveTodos: function () {  //  method returning the todos that are not completed. 
+			return this.todos.filter(function (todo) {  // .filter creates a new array with the elements that are not completed
+				return !todo.completed;  // returns the uncompleted todos
 			});
 		},
-		getCompletedTodos: function () {
-			return this.todos.filter(function (todo) {
-				return todo.completed;
+		getCompletedTodos: function () {  // method returning the todos that are completed
+			return this.todos.filter(function (todo) {  //  .filter creates a new array with the elements that are completed
+				return todo.completed;  // returns completed todos 
 			});
 		},
-		getFilteredTodos: function () {
-			if (this.filter === 'active') {
-				return this.getActiveTodos();
+		getFilteredTodos: function () {  // method filtering out active and completed todos for the render method.
+			if (this.filter === 'active') {  //  making a new array with the active todos
+				return this.getActiveTodos();  //  returning the new array with active todos
 			}
 
-			if (this.filter === 'completed') {
-				return this.getCompletedTodos();
+			if (this.filter === 'completed') {  //  making a new array with completed todos
+				return this.getCompletedTodos();  //  returning the 
 			}
 
 			return this.todos;
@@ -121,42 +121,41 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 		},
 		// accepts an element from inside the `.item` div and
 		// returns the corresponding index in the `todos` array
-		indexFromEl: function (el) {
+		indexFromEl: function (el) {  //  method for getting the id of the todos
 			var id = el.closest('li').getAttribute('data-id'); // Id takes the closest ancestors to el which matches li. 
-			var todos = this.todos;
-			var i = todos.length;
+			var todos = this.todos;  //  
+			var i = todos.length;  //  i is equal to the length of the todos array.
 
-			while (i--) {
-				if (todos[i].id === id) {
+			while (i--) {  //  looping through the array as long as its more than 0 
+				if (todos[i].id === id) {  //  fetching the id of the todos you are looping, if its equal to id
 					return i;
 				}
 			}
 		},
-		create: function (e) {
-			var input = e.target                            //  originally var input = $(e.target);
-      var val = input.value.trim();                      //  orignally var val = $input.val().trim();
+		create: function (e) {  //  method for creating todos
+			var input = e.target  //  originally var input = $(e.target);
+      var val = input.value.trim();  //  orignally var val = $input.val().trim();
 
-			if (e.which !== ENTER_KEY || !val) {
+			if (e.which !== ENTER_KEY || !val) {  //  if theres not event of pressing the enter key nor value in the input form(html) nothing is returned
 				return;
 			}
 
-			this.todos.push({
-				id: util.uuid(),
-				title: val,
-				completed: false
+			this.todos.push({  //  pushing the todo from the input onto the array
+				id: util.uuid(),  //  run the uuid(random id generator) on the id
+				title: val,  //  title is the input value
+				completed: false  // by default the todos are not completed
 			});
 
-			input.value =  '';
+			input.value =  '';  //  clears the input field 
 
-			this.render();
+			this.render();  //  run the render method - the li with the todo will appear on the page.
 		},
-		toggle: function (e) {
-			var i = this.indexFromEl(e.target);
-			this.todos[i].completed = !this.todos[i].completed;
-			this.render();
+		toggle: function (e) {  //  method for toggling a selected todo
+			var i = this.indexFromEl(e.target);  //  getting the position of the toggled todo
+			this.todos[i].completed = !this.todos[i].completed;  //  todos completed is now todos not completed
+			this.render();  //  run the render method - the change will no appear on the page
 		},
 		edit: function (e) {
-      var input  =  document.getElementById('#new-todo');
 			var input = $(e.target).closest('li').addClass('editing').find('.edit');
 			input.val(input.val()).focus();
 		},
