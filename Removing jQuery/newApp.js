@@ -72,13 +72,13 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			$('#new-todo').focus();
 			util.store('todos-jquery', this.todos);
 		},
-		renderFooter: function () {
-			var todoCount = this.todos.length;
-			var activeTodoCount = this.getActiveTodos().length;
-			var template = this.footerTemplate({
-				activeTodoCount: activeTodoCount,
-				activeTodoWord: util.pluralize(activeTodoCount, 'item'),
-				completedTodos: todoCount - activeTodoCount,
+		renderFooter: function () {  //  function to render interface below the main todo window. 
+			var todoCount = this.todos.length;  // counting the total amount of todos
+			var activeTodoCount = this.getActiveTodos().length;  //  calling the getActiveTodos method and checking the lenght of the activeTodo array. 
+			var template = this.footerTemplate({  //  object storing the name : value pairs in the footer template. 
+				activeTodoCount: activeTodoCount,  //  activeTodoCount(name) : the activeTodoCount(value) variable. -> this.getActiveTodos().length
+				activeTodoWord: util.pluralize(activeTodoCount, 'item'),  //  activeTodoWord (name) : util.pluralize (value) -> 
+				completedTodos: todoCount - activeTodoCount,  //  completedTodos(name) : todoCount - activeTodoCount(value) -> getting the amount of completedTodos by subtracting activeTodos from the total amount of todos. 
 				filter: this.filter
 			});
 
@@ -109,15 +109,15 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			}
 
 			if (this.filter === 'completed') {  //  making a new array with completed todos
-				return this.getCompletedTodos();  //  returning the 
+				return this.getCompletedTodos();  //  returning the completed todos
 			}
 
 			return this.todos;
 		},
-		destroyCompleted: function () {
+		destroyCompleted: function () {  //  method for only showing the active todos, and this way indirectly removing the completed ones. 
 			this.todos = this.getActiveTodos();
-			this.filter = 'all';
-			this.render();
+			this.filter = 'all';  //  filter the array of active todos to the 'all' router
+			this.render();  //  end of method.
 		},
 		// accepts an element from inside the `.item` div and
 		// returns the corresponding index in the `todos` array
@@ -133,7 +133,7 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			}
 		},
 		create: function (e) {  //  method for creating todos
-			var input = e.target  //  originally var input = $(e.target);
+			var input = e.target;  //  originally var input = $(e.target);
       var val = input.value.trim();  //  orignally var val = $input.val().trim();
 
 			if (e.which !== ENTER_KEY || !val) {  //  if theres not event of pressing the enter key nor value in the input form(html) nothing is returned
@@ -155,9 +155,15 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			this.todos[i].completed = !this.todos[i].completed;  //  todos completed is now todos not completed
 			this.render();  //  run the render method - the change will no appear on the page
 		},
-		edit: function (e) {
-			var input = $(e.target).closest('li').addClass('editing').find('.edit');
-			input.val(input.val()).focus();
+		edit: function (e) {  //  method for editing todos
+			var todoLi = e.target.closest('li');  //  targeteting the li where the event happened and adding class to that element.
+      todoLi.classList.add('editing');  //  adding class .editing to the selected todo
+      var input = todoLi.querySelector('.edit');  //  selecting the edit class 
+      var tmpStr = input.value;  // adding temporary string 
+      input.value = '';  //  clearing the input field
+      input.value = tmpStr;  //  adding the old value from tmpStr
+      input.focus();  //  cursor is now at the end of the input field
+  
 		},
 		editKeyup: function (e) {
 			if (e.which === ENTER_KEY) {
@@ -165,7 +171,9 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			}
 
 			if (e.which === ESCAPE_KEY) {
-				$(e.target).data('abort', true).blur();
+        var giveAbortAtt = e.target;
+        giveAbortAtt.addEventListener('abort', this.edit.input);
+				giveAbortAtt.blur();
 			}
 		},
 		update: function (e) {
