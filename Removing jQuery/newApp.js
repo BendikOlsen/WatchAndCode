@@ -163,39 +163,37 @@ jQuery(function ($) {  // Executes code when DOM is ready.
       input.value = '';  //  clearing the input field
       input.value = tmpStr;  //  adding the old value from tmpStr
       input.focus();  //  cursor is now at the end of the input field
-  
 		},
-		editKeyup: function (e) {
-			if (e.which === ENTER_KEY) {
+		editKeyup: function (e) {  //  function for deciding actions weather you press enter og escape
+			if (e.which === ENTER_KEY) {  // if enter is pressed after editing blur out.
 				e.target.blur();
 			}
 
-			if (e.which === ESCAPE_KEY) {
-        var giveAbortAtt = e.target;
-        giveAbortAtt.addEventListener('abort', this.edit.input);
-				giveAbortAtt.blur();
+			if (e.which === ESCAPE_KEY) {  //  if escape key is pressed, abort the editing function and blur out.
+            e.target.dataset.abort = true;
+				    e.target.blur();
+        
 			}
 		},
-		update: function (e) {
-			var el = e.target;
-			var $el = $(el);
-			var val = $el.val().trim();
+		update: function (e) {  //   method for updating the todolist when user clicks outside the input field after editing
+			var el = e.target;  //  making a variable of the target of the event(the todo item the user is editing).
+			var val = el.value.trim();  //  making a variable of the marked element with the elements value. 
 
-			if (!val) {
+			if (!val) {  //  if there no value in the input box after the user edited the todo element, the element should be destroyed.
 				this.destroy(e);
 				return;
 			}
 
-			if ($el.data('abort')) {
-				$el.data('abort', false);
+			if (el.dataset.abort) {   //  If the user aborts (uses escape key) the value remains the same
+				el.dataset.abort = true;
 			} else {
-				this.todos[this.indexFromEl(el)].title = val;
+				this.todos[this.indexFromEl(el)].title = val;  //  the marked todo updates to the new value. 
 			}
 
-			this.render();
+			this.render();  //  render the application with updated input.
 		},
-		destroy: function (e) {
-			this.todos.splice(this.indexFromEl(e.target), 1);
+		destroy: function (e) {  // method to destroy an element from the todo array
+			this.todos.splice(this.indexFromEl(e.target), 1);  //  targets the array that the user want to remove, and removes it completely from the array. 
 			this.render();
 		}
 	};
