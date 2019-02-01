@@ -53,11 +53,11 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			}).init('/all');      
 		},
 		bindEvents: function () {  //  function for binding event to certain user actions
-			// $('#new-todo').on('keyup', this.create.bind(this));  //  Bind the create method on actions where you release keyboard keys in the new todo field
-      document.getElementById('new-todo').addEventListener('keyup', this.create.bind(this));
-			$('#toggle-all').on('change', this.toggleAll.bind(this));
-      // document.getElementById('toggle-all').addEventListener('change', this.toggleAll.bind(this));
+      document.getElementById('new-todo').addEventListener('keyup', this.create.bind(this));  //  Bind the create method on actions where you release keyboard keys in the new todo field
+      document.getElementById('toggle-all').addEventListener('change', this.toggleAll.bind(this));  //  pressing the toggle all button. Toggles all the todos as completed, if all are completed all the todos are toggled as active. 
 			$('#footer').on('click', '#clear-completed', this.destroyCompleted.bind(this));
+      // var footerEvent = document.getElementById('footer');  //  Note to self: This is where you left off. 
+      // footerEvent.onclick.addEventListener('click', '#clear-completed', this.destroyCompleted.bind(this));
 			$('#todo-list')
 				.on('change', '.toggle', this.toggle.bind(this))
 				.on('dblclick', 'label', this.edit.bind(this))
@@ -88,6 +88,7 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 		},
 		toggleAll: function (e) {  // method for toggling all the todos.
       var isChecked = e.target.checked;  //  variable used to see which todos are checked
+      var isChecked = $(e.target).prop('checked');
 
 			this.todos.forEach(function (todo) {  //  forEach, looping through every todo, if the todo is completed thay are also chcked. 
 				todo.completed = isChecked;
