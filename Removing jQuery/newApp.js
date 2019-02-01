@@ -43,7 +43,7 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 			this.todos = util.store('todos-jquery');  //  todo-array is equal to the stored todos from the store-method.
       this.todoTemplate = Handlebars.compile(document.getElementById('todo-template').innerHTML);  //  compiles the todo-template so it can be executed on the init method.
 			this.footerTemplate = Handlebars.compile(document.getElementById('footer-template').innerHTML);  //  same as above for the footer-template.
-			this.bindEvents();
+			this.bindEvents();	//	runs the bindEvents method at the end of the init method. 
 
       new Router({  //  Note to self. Rewatch last video in the Reading section
 				'/:filter': function (filter) {
