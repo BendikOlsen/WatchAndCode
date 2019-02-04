@@ -62,7 +62,7 @@ jQuery(function ($) {  // Executes code when DOM is ready.
         }
       }.bind(this));
       
-      // event mananing for the todo list.
+      // event managing for the todo list.
       document.getElementById('todo-list').addEventListener('change', function (event)  {  //  Pressing the toggle button will run the toggle method. 
         if  (event.target.className === 'toggle')  {
           this.toggle(event);
@@ -97,10 +97,21 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 		render: function () {
 			var todos = this.getFilteredTodos();
       document.getElementById('todo-list').innerHTML = this.todoTemplate(todos);
-			$('#main').toggle(todos.length > 0);
-			$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
+      
+      if (todos.length > 0)  {
+        document.getElementById('main').style.display = 'block';
+      }  else {
+        document.getElementById('main').style.display = 'none';
+      };
+      
+			// $('.toggle-all').prop('checked', this.getActiveTodos().length === 0);
+      
+      if (document.getElementById('toggle-all').checked) {
+        this.getActiveTodos().length === 0;
+      }
+      
 			this.renderFooter();
-			$('#new-todo').focus();
+			$('.new-todo').focus();
 			util.store('todos-jquery', this.todos);
 		},
 		renderFooter: function () {  //  function to render interface below the main todo window. 
