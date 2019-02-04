@@ -55,19 +55,48 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 		bindEvents: function () {  //  function for binding event to certain user actions
       document.getElementById('new-todo').addEventListener('keyup', this.create.bind(this));  //  Bind the create method on actions where you release keyboard keys in the new todo field
       document.getElementById('toggle-all').addEventListener('change', this.toggleAll.bind(this));  //  pressing the toggle all button. Toggles all the todos as completed, if all are completed all the todos are toggled as active. 
-			$('#footer').on('click', '#clear-completed', this.destroyCompleted.bind(this));
-      // var footerEvent = document.getElementById('footer');  //  Note to self: This is where you left off. 
-      // footerEvent.onclick.addEventListener('click', '#clear-completed', this.destroyCompleted.bind(this));
-			$('#todo-list')
-				.on('change', '.toggle', this.toggle.bind(this))
-				.on('dblclick', 'label', this.edit.bind(this))
-				.on('keyup', '.edit', this.editKeyup.bind(this))
-				.on('focusout', '.edit', this.update.bind(this))
-				.on('click', '.destroy', this.destroy.bind(this));
+      
+      document.getElementById('footer').addEventListener('click', function(e)  {  //  If the clear completed button is clicked the destroyCompleted method runs. Adn the completed todos are cleared out. 
+        if  (e.target.id === 'clear-completed')  {
+          this.destroyCompleted();
+        }
+      }.bind(this));
+      
+      // event mananing for the todo list.
+      document.getElementById('todo-list').addEventListener('change', function (event)  {  //  Pressing the toggle button will run the toggle method. 
+        if  (event.target.className === 'toggle')  {
+          this.toggle(event);
+        }
+      }.bind(this));
+      
+      document.getElementById('todo-list').addEventListener('dblclick', function (event)  {  //  double clicking an element in the todo list will target the todos 'label' (the text field) then run the edit method. 
+        if  (event.target.localName === 'label')  {
+          this.edit(event);
+        }
+      }.bind(this));
+      
+      document.getElementById('todo-list').addEventListener('keyup', function (event)  {  //  a keyup event while beeing in "edit mode" will run the editKeyup method.
+        if  (event.target.className === 'edit') {
+          this.editKeyup(event);
+        }
+      }.bind(this));
+      
+      document.getElementById('todo-list').addEventListener('focusout', function (event)  {  //  focusout event (clicking outside the "event" window will run the update method. 
+        if  (event.target.className ===  'edit')  {
+          this.update(event);
+        }
+      }.bind(this));
+      
+      document.getElementById('todo-list').addEventListener('click', function  (event)  {  //  clicking the destroy button will run the destroy method. 
+        if  (event.target.className === 'destroy')  {
+          this.destroy(event);
+        }
+      }.bind(this));
+        
 		},
 		render: function () {
 			var todos = this.getFilteredTodos();
-			$('#todo-list').html(this.todoTemplate(todos));
+      document.getElementById('todo-list').innerHTML = this.todoTemplate(todos);
 			$('#main').toggle(todos.length > 0);
 			$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
 			this.renderFooter();
@@ -88,7 +117,6 @@ jQuery(function ($) {  // Executes code when DOM is ready.
 		},
 		toggleAll: function (e) {  // method for toggling all the todos.
       var isChecked = e.target.checked;  //  variable used to see which todos are checked
-      var isChecked = $(e.target).prop('checked');
 
 			this.todos.forEach(function (todo) {  //  forEach, looping through every todo, if the todo is completed thay are also chcked. 
 				todo.completed = isChecked;
