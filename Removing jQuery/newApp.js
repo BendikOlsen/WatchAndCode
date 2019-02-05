@@ -1,4 +1,4 @@
-/*global jQuery, Handlebars, Router */
+/* global Handlebars, Router */
 'use strict';    // Invoking strict mode to the overlying function and everything inside it. Strict mode can optimize the code and make the application run faster. 
 
 Handlebars.registerHelper('eq', function (a, b, options) {  //  note to self. Read up on handlebars and watch video
@@ -55,21 +55,21 @@ var App = {    //  this object contain the main methods of the application.
 		document.getElementById('new-todo').addEventListener('keyup', this.create.bind(this));  //  Bind the create method on actions where you release keyboard keys in the new todo field
 		document.getElementById('toggle-all').addEventListener('change', this.toggleAll.bind(this));  //  pressing the toggle all button. Toggles all the todos as completed, if all are completed all the todos are toggled as active. 
 		
-		document.getElementById('footer').addEventListener('click', function(e)  {  //  If the clear completed button is clicked the destroyCompleted method runs. Adn the completed todos are cleared out. 
-			if  (e.target.id === 'clear-completed')  {
+		document.getElementById('footer').addEventListener('click', function(e) {  //  If the clear completed button is clicked the destroyCompleted method runs. Adn the completed todos are cleared out. 
+			if  (e.target.id === 'clear-completed') {
 				this.destroyCompleted();
 			}
 		}.bind(this));
 		
 		// event managing for the todo list.
-		document.getElementById('todo-list').addEventListener('change', function (event)  {  //  Pressing the toggle button will run the toggle method. 
-			if  (event.target.className === 'toggle')  {
+		document.getElementById('todo-list').addEventListener('change', function (event) {  //  Pressing the toggle button will run the toggle method. 
+			if  (event.target.className === 'toggle') {
 				this.toggle(event);
 			}
 		}.bind(this));
 		
 		document.getElementById('todo-list').addEventListener('dblclick', function (event)  {  //  double clicking an element in the todo list will target the todos 'label' (the text field) then run the edit method. 
-			if  (event.target.localName === 'label')  {
+			if  (event.target.localName === 'label') {
 				this.edit(event);
 			}
 		}.bind(this));
@@ -97,7 +97,7 @@ var App = {    //  this object contain the main methods of the application.
 		var todos = this.getFilteredTodos();
 		document.getElementById('todo-list').innerHTML = this.todoTemplate(todos);
 		
-		if (todos.length > 0)  {
+		if (todos.length > 0) {
 			document.getElementById('main').style.display = 'inherit';  //  if the there are more then 0 todo, display the todos. 
 		}  else {
 			document.getElementById('main').style.display = 'none';  //  else don't show any todos.
@@ -122,7 +122,7 @@ var App = {    //  this object contain the main methods of the application.
 		});
 		
 		var footerId = document.getElementById('footer');  //  making a footer variable as I will refer to this element multiple times.
-		if (todoCount > 0)  {
+		if (todoCount > 0) {
 		 footerId.style.display = 'inherit';  //  if theres more then 0 todos multi graphical pages will show under the main todo window. 
 		 footerId.innerHTML = template;  //  getting the handlebars from the footer element. 
 		} else {
