@@ -1,19 +1,30 @@
 <script src="../tinytest.js"></script>
 <script>
 
-//  example 1
+//  example 1:
 //  forEach([1, 2, 3], function() {
 //    console.log('hi');
 //  });
 
-//  example 2
+//  example 2:
 //  forEach([1, 2, 3], function(number) {
 //    console.log(number);
 //  });
 
+// example 3: The index of the current element being processed in the array.
+//  forEach([1, 2, 3], function(number, index) {
+//    console.log(index);  
+//  });
+
+// example 4: The array that forEach() is being applied to.
+//  forEach([1, 2, 3], function(number, index, originalArray) {
+//    console.log(originalArray);
+//  });
+
+
 function forEach(array, callback) {
   for (var i = 0; i < array.length; i++) {
-    callback(array[i]);
+    callback(array[i], i, array);
   }
 }
 
@@ -25,10 +36,21 @@ tests({
     });
     eq(counter, 3);
   },
-  'It should pass each element as the first argument to the callback': function() {
+  'It should pass in the ith element as the first argument to the callback': function() {
     forEach([1], function(number) {
       eq(number, 1);
     });
+  },
+  'It should pass in the ith position as the second argument to the callback': function() {
+    forEach([1], function(number, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in the orignalArray as the third argument to the callback.': function() {
+    var testArray = [1, 2, 3];
+     forEach(testArray, function(number, index, originalArray) {
+       eq(originalArray, testArray)
+     });
   },
 });
 
