@@ -91,8 +91,8 @@ var App = {    //  this object contain the main methods of the application.
 				this.destroy(event);
 			}
 		}.bind(this));
-			
 	},
+			
 	render: function () {  //  method rendering the screen with the lates data updated. 
 		var todos = this.getFilteredTodos();
 		document.getElementById('todo-list').innerHTML = this.todoTemplate(todos);
@@ -102,11 +102,9 @@ var App = {    //  this object contain the main methods of the application.
 		}  else {
 			document.getElementById('main').style.display = 'none';  //  else don't show any todos.
 		};
-		
-		if (document.getElementById('toggle-all').checked) {  //  if toggle-all is checked. The amount of active todos is zero. 
-			this.getActiveTodos().length === 0;
-		}
 
+		document.getElementById('toggle-all').checked = this.getActiveTodos().length === 0;  //  if toggle-all is checked. The amount of active todos is zero. 
+	
 		this.renderFooter();
 		document.getElementById('new-todo').focus();
 		util.store('todos-jquery', this.todos);
@@ -133,7 +131,7 @@ var App = {    //  this object contain the main methods of the application.
 		var isChecked = e.target.checked;  //  variable used to see which todos are checked
 
 		this.todos.forEach(function (todo) {  //  forEach, looping through every todo, if the todo is completed thay are also chcked. 
-			todo.completed = isChecked;
+			todo.completed = isChecked;           
 		});
 
 		this.render();
@@ -167,7 +165,7 @@ var App = {    //  this object contain the main methods of the application.
 	// accepts an element from inside the `.item` div and
 	// returns the corresponding index in the `todos` array
 	indexFromEl: function (el) {  //  method for getting the id of the todos
-		var id = el.closest('li').getAttribute('data-id'); // Id takes the closest ancestors to el which matches li. 
+		var id = el.closest('li').dataset.id; // Id takes the closest ancestors to el which matches li. 
 		var todos = this.todos;  //  
 		var i = todos.length;  //  i is equal to the length of the todos array.
 
@@ -242,5 +240,4 @@ var App = {    //  this object contain the main methods of the application.
 		this.render();
 	}
 };
-
 App.init(); //  Initiates the app object when the sites load?
