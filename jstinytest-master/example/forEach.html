@@ -21,11 +21,11 @@
 //    console.log(originalArray);
 //  });
 
-function forEach(array, callback, configurableThisObject) {
+function forEach(array, callback, optionalThisObject) {
   var forEachCallback = callback;
 
-  if (configurableThisObject) {
-    forEachCallback = callback.bind(configurableThisObject);
+  if (optionalThisObject) {
+    forEachCallback = callback.bind(optionalThisObject);
   }
 
   for(var i = 0; i < array.length; i++) {
