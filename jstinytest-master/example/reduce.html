@@ -1,0 +1,70 @@
+<script src="../tinytest.js"></script>
+<script>
+
+var number = [1, 2, 3, 4]
+
+// 0 + 1 = 1
+// 1 + 2 = 3
+// 3 + 3 = 6
+// 6 + 4 = 10
+
+// the problem of repetition
+var sumSoFar = 0;
+console.log(sumSoFar)
+sumSoFar = sumSoFar + number[0]
+console.log(sumSoFar)
+sumSoFar = sumSoFar + number[1]
+console.log(sumSoFar)
+sumSoFar = sumSoFar + number[2]
+console.log(sumSoFar)
+sumSoFar = sumSoFar + number[3]
+console.log(sumSoFar)
+
+// simple adder function
+function adder(sumSoFar, nextNumber) {
+  return sumSoFar + nextNumber;
+}
+var sumSoFar = 0;
+
+// same as above? Again, problem of repetition
+console.log(sumSoFar)
+sumSoFar = adder(sumSoFar, number[0])
+console.log(sumSoFar)
+sumSoFar = adder(sumSoFar, number[1])
+console.log(sumSoFar)
+sumSoFar = adder(sumSoFar, number[2])
+console.log(sumSoFar)
+sumSoFar = adder(sumSoFar, number[3])
+console.log(sumSoFar)
+
+// forLoop for efficiency
+
+var sumSoFar = 0;
+for (var i = 0; i < number.length; i++) {
+  sumSoFar = adder(sumSoFar, number[i])
+  console.log(sumSoFar)
+}
+
+// getting closer to reduce
+function getSum(number, adder, startingValue) {
+  var sumSoFar = startingValue;
+  for (var i = 0; i < number.length; i++) {
+    sumSoFar = adder(sumSoFar, number[i])
+  }
+  return sumSoFar
+}
+
+getSum(number, adder, 0)
+
+// reduce
+
+function reduce(array, adder, startingValue) {
+  var resultSoFar = startingValue;
+  for (var i = 0; i < array.length; i++) {
+    resultSoFar = adder(resultSoFar, array[i])
+  }
+  return resultSoFar;
+}
+
+
+</script>
