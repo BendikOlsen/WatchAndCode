@@ -1,0 +1,111 @@
+<script src="../tinytest.js"></script>
+<script>
+
+//  example 1: Callback should run 3 times
+//  map([1, 2, 3], function(){})
+
+//  example 2: Callback has access to ith element
+//  map([1, 2, 3], function(number) {
+//    console.log(number);
+//  });
+
+// example 3: Callback access to index
+//  map([1, 2, 3], function(number, index) {
+//    console.log(index);  
+//  });
+
+// example 4: Callback has access to originalArray
+//  map([1, 2, 3], function(number, index, originalArray) {
+//    console.log(originalArray);
+//  });
+
+// example 5: Optional this.
+// map([1, 2, 3], function () {
+//  console.log(this.name); 
+// }, {name: 'Bendik'});
+
+// example 6: 
+// var originalArray = [1, 2, 3];
+// var mappedArray = filter(originalArray, function () {});
+// originalArray !== mappedArray
+
+// example 7:
+// var originalArray = [1, 2, 3];
+// var mappedArray = map(originalArray, function (element) {
+//   return element * 2;
+// });
+// Expect mappedArray to be [2, 4, 6]
+
+function map(originalArray, callback, optionalThis) {
+  var mappedCallback = callback;
+
+  if (optionalThis) {
+    mappedCallback = callback.bind(optionalThis)
+  }
+
+  var mappedArray = [];
+
+  for (var i = 0; i < originalArray.length; i++) {
+    if (i in originalArray) {
+      mappedArray[i] = mappedCallback(originalArray[i], i, originalArray)
+    }
+  }
+
+  return mappedArray;
+}
+
+tests({
+  
+  'It should run the callback function array.length times': function() {
+    var numberOfTimesCallbackHasRun = 0;
+    map([1, 2, 3], function() {
+      numberOfTimesCallbackHasRun++;
+    });
+    eq(numberOfTimesCallbackHasRun, 3);
+  },
+  'It should pass in the ith element as the first argument to the callback': function() {
+    map([1], function(number) {
+      eq(number, 1);
+    });
+  },
+  'It should pass in the ith position as the second argument to the callback': function() {
+    map([1], function(number, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in the orignalArray as the third argument to the callback.': function() {
+    var testArray = [1, 2, 3];
+     map(testArray, function(number, index, originalArray) {
+       eq(originalArray, testArray)
+     });
+  },
+  'It should accept an optional this object': function() {
+    map([1], function () {
+      eq(this.description, 'I should be accessible inside of the callback');
+    }, {description: 'I should be accessible inside of the callback'}); 
+  },
+  'It should return an array': function() {
+    var mappedArray = map([], function() {});
+      eq(Array.isArray(mappedArray), true);
+  },
+  'It should return a new mapped array, not the original array': function () {
+    var arrayBeingMapped = [];
+    var mappedArray = map(arrayBeingMapped, function() {} );
+    eq(mappedArray !== arrayBeingMapped, true) 
+  },
+  'It should return mapped array.': function() {
+    var mappedArray = map([4], function(number) {
+      return number * 2;
+    });
+    eq(mappedArray[0], 8);
+  },
+  'It should skip unassigned indexes': function() {
+    var weirdArray = [, 1];
+    var mappedArray = map(weirdArray, function double(number) {
+      return number * 2;
+    });
+    eq(0 in mappedArray, false)
+    eq(mappedArray[1], 2)
+  }
+});
+</script>
