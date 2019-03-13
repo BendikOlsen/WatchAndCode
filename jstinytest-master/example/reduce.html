@@ -27,28 +27,40 @@
 function reduce(array, callback, initialValue) {
   var startingIndex = 0;
   var resultSoFar = initialValue;
+  var length = array.length;
+  var arrayIndexes = Object.keys(array)
 
   // No initialValue
   if (arguments.length < 3) {
+    if (arrayIndexes.length === 0) {
+      throw new TypeError('Reduce of empty array with no initial value');
+    }
+    // If array has one element, return it.
+    if (arrayIndexes.length === 1) {
+      var onlyIndex = arrayIndexes[0];
+      var onlyElement = array[onlyIndex];
+      return onlyElement;
+    }
+
+    // We want to skip holes at the beginning of the array.
+    while (startingIndex in array === false && startingIndex < length) {
+      startingIndex++;
+    }
+
     resultSoFar = array[startingIndex];
     startingIndex++;
 
-    // If array has one element, return it.
-    if (Object.keys(array).length === 1) {
-      var singelIndex = Object.keys(array)[0];
-      var singelElement = array[singelIndex];
-      return singelElement;
-    }
-
   //  Has initialValue
   } else {
-  if (Object.keys(array).length === 0) {
+  if (arrayIndexes.length === 0) {
       return initialValue;
     }
   }
   
-  for (var i = startingIndex; i < array.length; i++) {
-    resultSoFar = callback(resultSoFar, array[i], i);
+  for (var i = startingIndex; i < length; i++) {
+    if (i in array) {
+      resultSoFar = callback(resultSoFar, array[i], i, array);
+    }
   }
 
   return resultSoFar;
@@ -129,14 +141,32 @@ tests({
 
     eq(sum, 6);
   },
-  'It should exclude holes. ': function() {
-    fail();
+  'If initial value, it should exclude holes. ': function() {
+    var sum = reduce([, 1, , 2, 3,], function(a, b) {
+      return a + b;
+    }, 0);
+    eq(sum, 6);
   },
-  'If no initialValue, and array is empty, throw TypeError.': function() {
-    fail();
+  'If no initial value, it should exclude holes too. ': function() {
+    var sum = reduce([, 1, , 2, 3,], function(a, b) {
+      return a + b;
+    });
+    eq(sum, 6);
+  },
+  'If array is empty, and no intialValue, throw TypeError.': function() {
+    var isTypeError = false;
+    try {
+      reduce([], function() {});
+    } catch(e) {
+      var isTypeError = (e instanceof TypeError);
+    }
+    eq(isTypeError, true);
   },
   'It should pass array as fourth argument as callback.': function() {
-    fail();
+    var testArray = [1, 2];
+    reduce(testArray, function(previousValue, currentValue, currentIndex, arrayToReduce) {
+      eq(arrayToReduce, testArray);
+    });
   }
 });
 
