@@ -37,14 +37,6 @@
  * -Joe Walnes
  * MIT License. See https://github.com/joewalnes/jstinytest/
  */
-
- // DONE: Get successes to be green.
- // DONE: Make sure only one error per failure goes to the console.
- // DONE: Make failures red.
- // DONE: Show stack traces for failures.
- // DONE: Only show stack traces if you click expand. 
- // TODO: Output sumary statistics to the DOM.
-
 var TinyTestHelpers = {
     renderStats: function(tests, failures) {
         var numberOfTests = Object.keys(tests).length;
@@ -57,7 +49,7 @@ var TinyTestHelpers = {
         summaryElement.textContent = summaryString;
         document.body.appendChild(summaryElement);
     }
-}
+};
 
 var TinyTest = {
     run: function(tests) {
@@ -74,7 +66,6 @@ var TinyTest = {
                 console.groupEnd;   
             }
         }
-
         setTimeout(function() { // Give document a chance to complete
             if (window.document && document.body) {
                 document.body.style.backgroundColor = (failures == 0 ? '#99ff99' : '#ff9999');
@@ -106,7 +97,6 @@ var TinyTest = {
             throw new Error('assertStrictEquals() "' + expected + '" !== "' + actual + '"');
         }
     },
-
 };
 
 var fail               = TinyTest.fail.bind(TinyTest),
