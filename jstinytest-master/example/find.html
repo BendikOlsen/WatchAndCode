@@ -1,0 +1,102 @@
+<script src="../simpleTest.js"></script>
+<script>
+
+// Syntax from MDN
+// arr.find(callback[, thisArg])
+
+// It should execute callback array.lenght times.
+// It should pass in the value of the element as the first argument to the callback.
+// It should pass in the ith position as the second argument to the callback.
+// It should pass in the originalArray as the third argument to the callback. 
+
+// It should accept an optionalThis object.
+
+// It should check if the array contains elements
+// It should return the value of the first element that the callback returns as truthy.
+// It should return undefined if there is no true value in the array.
+
+// It should run the callback on 'holes' in the array.
+
+function find(array, callback, optionalThis) {
+    var findCallback = callback;
+
+// if there is an optional this, the this value should be accessible inside of the callback. 
+    if (optionalThis) {
+        findCallback = callback.bind(optionalThis);
+    }
+
+    var findArray = [];
+
+// Looping through the original array, if the callback return truthy on one of the elements.
+// The element is returned and the for loops end. 
+    for (var i = 0; i < array.length; i++) {
+
+       if (findCallback(array[i], i, array)) {
+            findArray.push(array[i]);
+            break;
+       };
+    }
+    return findArray;
+};
+
+tests({
+    'It should run the callback function array.lenght times.': function () {
+        var timesCallbackHasRun = 0;
+        find([1, 2, 3], function() {
+            timesCallbackHasRun++;
+        });
+        eq(timesCallbackHasRun, 3);
+    },
+    'It should pass in the value of the element as the first argument to the callback.': function () {
+        find([1], function(element) {
+            eq(element, 1);
+        });
+    },
+    'It should pass in the ith position as the second argument to the callback.': function () {
+        find([1], function(element, index) {
+            eq(index, 0);
+        });
+    },
+    'It should pass in the originalArray as the third argument to the callback.': function () {
+        testArray = [1, 2, 3]
+        find(testArray, function(element, index, orginalArray) {
+            eq(testArray, orginalArray);
+        });
+    },
+    'It should accept an optionalThis object.': function () {
+        find([1], function() {
+            eq(this.description, 'I should be accessible inside of the callback');
+        }, {description: 'I should be accessible inside of the callback'});
+    },
+    'It should check if the array contains an element': function () {
+        var testArray = [1];
+        find(testArray, function(element, index, orginalArray) {
+            if(testArray.includes(1)) {
+                return testArray[index];
+            }
+        });
+        eq(testArray.includes(1), true);
+    },
+    'it should return the value of the first element in the array that satisfies the provided testing function.': function () {
+        testArray = find([1, 2, 3], function(element){
+            return element > 1;
+        })
+        eq(testArray[0], 2);
+    },
+    'It should return undefined if no value satisfies the provided testing function': function () {
+        testArray = find([1, 2], function(element){
+            return element > 3;
+        });
+        eq(testArray[0], undefined);
+
+    },
+    'It should run the callback on holes': function () {
+        var timesCallbackHasRun = 0;
+        find([,1, 2,,,5], function() {
+            timesCallbackHasRun++;
+        });
+        eq(timesCallbackHasRun, 6);
+    },
+});
+
+</script>
