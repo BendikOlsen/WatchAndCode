@@ -110,18 +110,17 @@ tests({
         var callbackCount = 0;
 
 
-        findIndex(testArray, function(){
+        find(testArray, function(){
             callbackCount++
             testArray = notOriginalArayy;
         });
         eq(callbackCount, 2);
     },
     'It should run the callback on elements that are deleted': function () {
-        fail();
         var testArray = [1, 2, 3];
         var callbackCount = 0;
 
-        findIndex(testArray, function(){
+        find(testArray, function(){
             testArray.splice(0, 3)
             callbackCount++
            
@@ -129,9 +128,8 @@ tests({
         eq(callbackCount, 3);
     },
     'It should run the callback on holes.': function () {
-        fail();
         var timesCallbackHasRun = 0;
-        findIndex([,1, 2,,,5], function() {
+        find([,1, 2,,,5], function() {
             timesCallbackHasRun++;
         });
         eq(timesCallbackHasRun, 6);
