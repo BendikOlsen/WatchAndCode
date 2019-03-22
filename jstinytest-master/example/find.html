@@ -15,28 +15,31 @@
 // It should return the value of the first element that the callback returns as truthy.
 // It should return undefined if there is no true value in the array.
 
+// It should not run the callback on appended elements.
+// It should run the callback on the original elements of the array, even if they are changed before being called.
+// It should run the callback on elements that are deleted.
+
 // It should run the callback on 'holes' in the array.
 
 function find(array, callback, optionalThis) {
     var findCallback = callback;
+    var lengthOfOriginalArray = array.length;
 
 // if there is an optional this, the this value should be accessible inside of the callback. 
     if (optionalThis) {
         findCallback = callback.bind(optionalThis);
     }
 
-    var findArray = [];
 
 // Looping through the original array, if the callback return truthy on one of the elements.
 // The element is returned and the for loops end. 
-    for (var i = 0; i < array.length; i++) {
+    for (var i = 0; i < lengthOfOriginalArray; i++) {
 
        if (findCallback(array[i], i, array)) {
-            findArray.push(array[i]);
-            break;
+            return array[i];
        };
     }
-    return findArray;
+    return undefined;
 };
 
 tests({
@@ -78,21 +81,57 @@ tests({
         eq(testArray.includes(1), true);
     },
     'it should return the value of the first element in the array that satisfies the provided testing function.': function () {
-        testArray = find([1, 2, 3], function(element){
+       var result = find([1, 2, 3], function(element){
             return element > 1;
         })
-        eq(testArray[0], 2);
+        eq(result, 2);
     },
-    'It should return undefined if no value satisfies the provided testing function': function () {
-        testArray = find([1, 2], function(element){
+    'It should return undefined if no value satisfies the provided testing function.': function () {
+       var result = find([1, 2], function(element){
             return element > 3;
         });
-        eq(testArray[0], undefined);
-
+        eq(result, undefined);
     },
-    'It should run the callback on holes': function () {
+    'It should not run the callback on appended elements.': function () {
+        var testArray = [1];
+        var originalLenght = testArray.length;
+        var callbackCount = 0;
+        
+
+        find(testArray, function() {
+            callbackCount++;
+            testArray.push(1)
+        });
+        eq(originalLenght, callbackCount)
+    },
+    'It should run the callback on the original elements of the array, even if they are changed before being called.': function () {
+        var testArray = [1, 2];
+        var notOriginalArayy = [4]
+        var callbackCount = 0;
+
+
+        findIndex(testArray, function(){
+            callbackCount++
+            testArray = notOriginalArayy;
+        });
+        eq(callbackCount, 2);
+    },
+    'It should run the callback on elements that are deleted': function () {
+        fail();
+        var testArray = [1, 2, 3];
+        var callbackCount = 0;
+
+        findIndex(testArray, function(){
+            testArray.splice(0, 3)
+            callbackCount++
+           
+        });
+        eq(callbackCount, 3);
+    },
+    'It should run the callback on holes.': function () {
+        fail();
         var timesCallbackHasRun = 0;
-        find([,1, 2,,,5], function() {
+        findIndex([,1, 2,,,5], function() {
             timesCallbackHasRun++;
         });
         eq(timesCallbackHasRun, 6);
