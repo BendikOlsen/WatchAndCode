@@ -104,28 +104,35 @@ tests({
         });
         eq(originalLenght, callbackCount)
     },
-    'It should run the callback on the original elements of the array, even if they are changed before being called.': function () {
-        var testArray = [1, 2];
-        var notOriginalArayy = [4]
+    'It should run the callback on elements of the array, even if they are changed before being called.': function () {
+        var testArray = [1, 2, 3];
         var callbackCount = 0;
+        var length = testArray.length;
 
 
         find(testArray, function(){
+
+            if (callbackCount < length) {
+
+                testArray[callbackCount+1] += 10
+            }
             callbackCount++
-            testArray = notOriginalArayy;
+            eq(testArray[1],12);
+            eq(testArray[2], 13);
         });
-        eq(callbackCount, 2);
+    
     },
     'It should run the callback on elements that are deleted': function () {
         var testArray = [1, 2, 3];
+        var length = testArray.length;
         var callbackCount = 0;
 
         find(testArray, function(){
-            testArray.splice(0, 3)
+            debugger;
+            testArray.splice(0);
             callbackCount++
-           
         });
-        eq(callbackCount, 3);
+        eq(callbackCount, length);
     },
     'It should run the callback on holes.': function () {
         var timesCallbackHasRun = 0;

@@ -1,0 +1,63 @@
+<script src="../simpleTest.js"></script>
+<script>
+
+// Syntax from MDN
+// arr.every(callback[, thisArg])
+
+// It should execute callback array.lenght times.
+// It should pass in element as the first argument to the callback.
+// It should pass in the ith position as the second argument to the callback.
+// It should pass in the originalArray as the third argument to the callback. 
+
+// It should accept an optionalThis object.
+
+// It should run the callback until it find one element where the callback returns a falsy value.
+// It should return false immediately if the callback returns a false value.
+
+// It should return true if the callback only encounters truthy values on every element in the array. 
+
+// It should only run callback on indexes of the array which are assigned values.
+// It should not run callback on deleted elements, or elements without value. 
+
+// It should not mutate the array on which it is called. 
+// It should not run on appended elements. 
+
+
+
+tests({
+    'It should run the callback function array.lenght times.': function () {
+        fail();
+        // var timesCallbackHasRun = 0;
+        // findIndex([1, 2, 3], function() {
+        //     timesCallbackHasRun++;
+        // });
+        // eq(timesCallbackHasRun, 3);
+    },
+    'It should pass element as the first argument to the callback.': function () {
+        fail();
+    //     findIndex([1], function(element) {
+    //         eq(element, 1);
+    //     });
+    },
+    'It should pass in the ith position as the second argument to the callback.': function () {
+        fail();
+        // findIndex([1], function(element, index) {
+        //     eq(index, 0);
+        // });
+    },
+    'It should pass in the originalArray as the third argument to the callback.': function () {
+        fail();
+        // testArray = [1, 2, 3]
+        // findIndex(testArray, function(element, index, orginalArray) {
+        //     eq(testArray, orginalArray);
+        // });
+    },
+    'It should accept an optionalThis object.': function () {
+        fail();
+        // findIndex([1], function() {
+        //     eq(this.description, 'I should be accessible inside of the callback');
+        // }, {description: 'I should be accessible inside of the callback'});
+    },
+});
+
+</script>

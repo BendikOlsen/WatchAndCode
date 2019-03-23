@@ -20,7 +20,7 @@ function filter(array, callback, optionalThis){
 
     if(optionalThis) {
         filteredCallback = callback.bind(optionalThis)
-    }
+    };
 
     var filteredArray = [];
 
@@ -29,7 +29,7 @@ function filter(array, callback, optionalThis){
           filteredArray.push(array[i]);
       } else {
           return undefined
-      }
+      };
     }
     return filteredArray;
 };
