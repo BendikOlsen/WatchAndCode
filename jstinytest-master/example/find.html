@@ -105,7 +105,7 @@ tests({
         eq(originalLenght, callbackCount)
     },
     'It should run the callback on elements of the array, even if they are changed before being called.': function () {
-        var testArray = [1, 2, 3];
+        var testArray = [1, 2];
         var callbackCount = 0;
         var length = testArray.length;
 
@@ -113,12 +113,11 @@ tests({
         find(testArray, function(){
 
             if (callbackCount < length) {
-
-                testArray[callbackCount+1] += 10
+                testArray[callbackCount+1] += 10;
             }
             callbackCount++
-            eq(testArray[1],12);
-            eq(testArray[2], 13);
+            eq(testArray[0], 1);
+            eq(testArray[1], 12);
         });
     
     },
@@ -128,7 +127,6 @@ tests({
         var callbackCount = 0;
 
         find(testArray, function(){
-            debugger;
             testArray.splice(0);
             callbackCount++
         });

@@ -91,14 +91,17 @@ tests({
     },
     'It should run the callback on the original elements of the array, even if they are changed before being called.': function () {
         var testArray = [1, 2];
-        var notOriginalArayy = [4]
         var callbackCount = 0;
+        var length = testArray.length;
 
         findIndex(testArray, function(){
-            callbackCount++
-            testArray = notOriginalArayy;
+            if(callbackCount < length) {
+                testArray[callbackCount+1] += 10;
+            }
+            callbackCount++;
+            eq(testArray[0], 1);
+            eq(testArray[1], 12);
         });
-        eq(callbackCount, 2);
     },
     'It should run the callback on elements that are deleted': function () {
         var testArray = [1, 2, 3];
