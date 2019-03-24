@@ -105,20 +105,22 @@ tests({
         eq(originalLenght, callbackCount)
     },
     'It should run the callback on elements of the array, even if they are changed before being called.': function () {
-        var testArray = [1, 2];
+        var testArray = [1, 2, 3];
         var callbackCount = 0;
         var length = testArray.length;
 
 
         find(testArray, function(){
+            debugger;
 
             if (callbackCount < length) {
                 testArray[callbackCount+1] += 10;
             }
             callbackCount++
-            eq(testArray[0], 1);
-            eq(testArray[1], 12);
         });
+        eq(testArray[0], 1);
+        eq(testArray[1], 12);
+        eq(testArray[2], 13)
     
     },
     'It should run the callback on elements that are deleted': function () {
