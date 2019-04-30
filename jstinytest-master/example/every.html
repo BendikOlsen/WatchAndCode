@@ -13,51 +13,87 @@
 
 // It should run the callback until it find one element where the callback returns a falsy value.
 // It should return false immediately if the callback returns a false value.
-
 // It should return true if the callback only encounters truthy values on every element in the array. 
 
 // It should only run callback on indexes of the array which are assigned values.
 // It should not run callback on deleted elements, or elements without value. 
-
 // It should not mutate the array on which it is called. 
 // It should not run on appended elements. 
+// It should return true if the array is empty.
 
+function every(array, callback, optionalThis) {
+
+    var everyCallback = callback;
+
+    if(optionalThis) {
+        everyCallback = callback.bind(optionalThis);
+    }
+    
+    for(var i = 0; i < array.length; i++) {
+        everyCallback(array[i], i, array);
+    }
+
+};
 
 
 tests({
     'It should run the callback function array.lenght times.': function () {
-        fail();
-        // var timesCallbackHasRun = 0;
-        // findIndex([1, 2, 3], function() {
-        //     timesCallbackHasRun++;
-        // });
-        // eq(timesCallbackHasRun, 3);
+        var timesCallbackHasRun = 0;
+        every([1, 2, 3], function() {
+            timesCallbackHasRun++;
+        });
+        eq(timesCallbackHasRun, 3);
     },
     'It should pass element as the first argument to the callback.': function () {
-        fail();
-    //     findIndex([1], function(element) {
-    //         eq(element, 1);
-    //     });
+        every([1], function(element) {
+            eq(element, 1);
+        });
     },
     'It should pass in the ith position as the second argument to the callback.': function () {
-        fail();
-        // findIndex([1], function(element, index) {
-        //     eq(index, 0);
-        // });
+        every([1], function(element, index) {
+            eq(index, 0);
+        });
     },
     'It should pass in the originalArray as the third argument to the callback.': function () {
-        fail();
-        // testArray = [1, 2, 3]
-        // findIndex(testArray, function(element, index, orginalArray) {
-        //     eq(testArray, orginalArray);
-        // });
+        testArray = [1, 2, 3]
+        every(testArray, function(element, index, orginalArray) {
+            eq(testArray, orginalArray);
+        });
     },
     'It should accept an optionalThis object.': function () {
-        fail();
-        // findIndex([1], function() {
-        //     eq(this.description, 'I should be accessible inside of the callback');
-        // }, {description: 'I should be accessible inside of the callback'});
+        every([1], function() {
+            eq(this.description, 'I should be accessible inside of the callback');
+        }, {description: 'I should be accessible inside of the callback'});
     },
+    'It should run the callback until it find one element where the callback returns a falsy value.': function () {
+        fail();
+
+        every([1, 2, 3], function(element) {
+            return element > 2
+        })
+    },
+    ' It should return false immediately if the callback returns a false value.': function () {
+        fail();
+    },
+    'It should return true if the callback only encounters truthy values on every element in the array.': function () {
+        fail();
+    },
+    'It should only run callback on indexes of the array which are assigned values.': function () {
+        fail();
+    },
+    'It should not run callback on deleted elements, or elements without value.': function () {
+        fail();
+    },
+    'It should not mutate the array on which it is called.': function () {
+        fail();
+    },
+    'It should not run on appended elements. ': function () {
+        fail();
+    },
+    'It should return true if the array is empty.': function () {
+        fail();
+    },
+
 });
 
 </script>
